@@ -1,5 +1,5 @@
 canvas {
-	position: absolute;
+	position: fixed;
 	outline: 2px solid #d3d3d3;
 }
 

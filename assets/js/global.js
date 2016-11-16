@@ -19,7 +19,7 @@ function draw() {
 			// get the final position
 			// get the final face
 
-	//draw the board  6 x 6
+	//draw the board  3 x 3
 	drawBoard();
 }
 
@@ -67,28 +67,35 @@ function drawBoard() {
 	}
 }
 
-function drawCube() {
-	var scene = new THREE.Scene();		//scene
-	//camera
-	var camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
+function drawCube() {	
 
 	//renderer
 	var canvas = document.getElementById("cube-canvas");
-	var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+	var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 	renderer.setSize(200, 200);
 	document.body.appendChild(renderer.domElement);
 
-	var geometry = new THREE.BoxGeometry(10, 10, 10);
+	var scene = new THREE.Scene();		//scene
+
+	var geometry = new THREE.BoxGeometry(100, 100, 100);
 	var material = new THREE.MeshBasicMaterial({color: 0xfffff, wireframe: true});
 	var cube = new THREE.Mesh(geometry, material);
 	cube.rotation.y = Math.PI * 45 / 180;
 	scene.add(cube);
-	camera.position.y = 16;
-	camera.position.z = 20;
+
+	//camera
+	var camera = new THREE.PerspectiveCamera(45, 1, 0.1, 10000);
+	camera.position.y = 160;
+	camera.position.z = 200;
 	camera.lookAt(cube.position);
+
+	scene.add(camera);
+
+	var clock = new THREE.Clock();
 
 	var render = function() {
 		requestAnimationFrame(render);
+		cube.rotation.y -= clock.getDelta();
 		renderer.render(scene, camera);
 	};
 
