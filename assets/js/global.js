@@ -1,6 +1,6 @@
 window.onload = function () {
 
-	window.debug = true;	// set to true iff you want console log output
+	window.debug = false;	// set to true iff you want console log output
 	
 	var canvas = document.getElementById("main-canvas");
 	window.ctx = canvas.getContext("2d");
@@ -73,7 +73,8 @@ function drawCube() {
 	var camera = new THREE.PerspectiveCamera(45, 1, 1, 1000);
 
 	//renderer
-	var renderer = new THREE.WebGLRenderer({ alpha: true });
+	var canvas = document.getElementById("cube-canvas");
+	var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
 	renderer.setSize(200, 200);
 	document.body.appendChild(renderer.domElement);
 

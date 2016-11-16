@@ -9,6 +9,6 @@
     </head>
     <body id="body">
     <canvas id="main-canvas" width="600" height="600"></canvas>
-
+    <canvas id="cube-canvas" width="600" height="600"></canvas>
     </body>
 </html>
