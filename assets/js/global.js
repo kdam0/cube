@@ -1,18 +1,29 @@
 window.onload = function () {
 
-	window.debug = false;	// set to true iff you want console log output
+	window.debug = true;	// set to true iff you want console log output
 	
 	var canvas = document.getElementById("main-canvas");
 	window.ctx = canvas.getContext("2d");
 	// canvas.style.display = "none";
 
+	window.CANVAS_X_OFFSET = 200;
+	window.CANVAS_Y_OFFSET = 200;
+
 	draw();
+
+	//handleKeys();
 }
 
 
 function draw() {
+	var coords = generateCubeConfig();
+
+	consOut(coords);
+
+	placeDice(coords[0] , coords[1]);
+
 	// draw the cube
-	drawCube();
+	drawDice();
 		// generate the cube config
 			// get the initial position
 			// get the initial face
@@ -23,17 +34,16 @@ function draw() {
 	drawBoard();
 }
 
-function clear() {
-
-}
-
-function update() {
-
-}
-
 
 function generateCubeConfig() {
+	// generate a random x between 1-3 incl.
+	var x = Math.floor((Math.random()) * 3 + 1);
+	// generate a random y between 1-3 incl.
+	var y = Math.floor((Math.random()) * 3 + 1);
 
+	consOut(x);
+
+	return [x,y];
 }
 
 function drawBoard() {
@@ -67,7 +77,7 @@ function drawBoard() {
 	}
 }
 
-function drawCube() {
+function drawDice() {
 	//renderer
 	var canvas = document.getElementById("cube-canvas");
 	var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
@@ -82,8 +92,28 @@ function drawCube() {
 	var materials = [];
 	for (var i = 1; i <= 6; i++) {
 		var img = new Image();
-		// img.crossOrigin = "anonymous";
-		img.src = 'assets/images/faces/' + i + '.png';
+		
+		switch (i) {
+			case 1:
+				img.src = 'assets/images/faces/3.png';
+				break;
+			case 2:
+				img.src = 'assets/images/faces/4.png';
+				break;
+			case 3:
+				img.src = 'assets/images/faces/5.png';
+				break;
+			case 4:
+				img.src = 'assets/images/faces/2.png';
+				break;
+			case 5:
+				img.src = 'assets/images/faces/1.png';
+				break;
+			case 6:
+				img.src = 'assets/images/faces/6.png';
+				break;
+		}
+
 		var tex = new THREE.Texture(img);
 		img.tex = tex;
 		img.onload = function() {
@@ -117,4 +147,52 @@ function drawCube() {
 	};
 
 	render();
+}
+
+function placeDice(x, y) {
+
+	var x_inc = (x-1) * CANVAS_X_OFFSET;
+	var y_inc = (y-1) * CANVAS_Y_OFFSET;
+
+	// get the current position
+	var position = $('#cube-canvas').position();
+	// adjust dice position
+	$('#cube-canvas').css({ 
+		left: position.left + x_inc, 
+		top: position.top + y_inc
+	});
+	
+	consOut('x: ' + position.left + ' | y: ' + position.top); //initial position
+	consOut("dice placed!");
+}
+
+function handleKeys() {
+	$(document).keydown(function(e) {
+		switch (e.which) {
+			case 37:
+				placeDice(3,3);
+			case 38:
+				break;
+			case 39:
+				break;
+			case 40:
+				break;
+			default: return;
+		}
+		e.preventDefault();
+	});
+}
+
+// print mssg to console out only if debuging is set to true
+function consOut(mssg) {
+	if (window.debug) {
+		console.log(mssg);
+	}
+}
+
+function swap(arr, a, b) {
+	var temp = arr[b];
+	arr[b] = arr[a];
+	arr[a] = temp;
+	return arr;
 }
