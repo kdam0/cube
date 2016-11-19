@@ -67,8 +67,7 @@ function drawBoard() {
 	}
 }
 
-function drawCube() {	
-
+function drawCube() {
 	//renderer
 	var canvas = document.getElementById("cube-canvas");
 	var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
@@ -77,9 +76,27 @@ function drawCube() {
 
 	var scene = new THREE.Scene();		//scene
 
-	var geometry = new THREE.BoxGeometry(100, 100, 100);
-	var material = new THREE.MeshBasicMaterial({color: 0xfffff, wireframe: true});
-	var cube = new THREE.Mesh(geometry, material);
+	// var geometry = new THREE.BoxGeometry(100, 100, 100);
+	// var material = new THREE.MeshBasicMaterial({color: 0xfffff, wireframe: true});
+
+	var materials = [];
+	for (var i = 1; i <= 6; i++) {
+		var img = new Image();
+		// img.crossOrigin = "anonymous";
+		img.src = 'assets/images/faces/' + i + '.png';
+		var tex = new THREE.Texture(img);
+		img.tex = tex;
+		img.onload = function() {
+			this.tex.needsUpdate = true;
+		};
+		var mat = new THREE.MeshBasicMaterial({color: 0xffffff, map: tex});
+		materials.push(mat);
+	}
+
+	var cubeGeo = new THREE.BoxGeometry(100,100,100,1,1,1);
+	var cube = new THREE.Mesh(cubeGeo, new THREE.MeshFaceMaterial( materials ));
+
+	// var cube = new THREE.Mesh(geometry, material);
 	cube.rotation.y = Math.PI * 45 / 180;
 	scene.add(cube);
 
